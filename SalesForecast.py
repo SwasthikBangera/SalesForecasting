@@ -31,9 +31,6 @@ print(sales_dataset.shape)
 # Information about the dataset
 print(sales_dataset.info())
 
-# Statistical data of dataset
-print(sales_dataset.describe())
-
 # Type of values in 'object' column - Item_Identifier
 print(sales_dataset['Item_Identifier'].unique())
 print(sales_dataset['Item_Identifier'].value_counts())
@@ -80,11 +77,69 @@ sales_dataset['Item_Weight'].fillna(sales_dataset['Item_Weight'].mean(), inplace
 print(sales_dataset.isnull().sum())
 
 # Mode value of Outlet_Size
-
+outlet_size_mode = sales_dataset.pivot_table(values='Outlet_Size', columns='Outlet_Type', aggfunc=(lambda x: x.mode()[0]))
+print(outlet_size_mode)
 
 # Replacing categorical missing values with mode
+missing_values = sales_dataset['Outlet_Size'].isnull()
+print(missing_values)
 
- 
+#sales_dataset.loc[missing_values,'Outlet_Size'] = sales_dataset.loc[missing_values, 'Outlet_Type'].apply(lambda x: outlet_size_mode)
+print(sales_dataset.isnull().sum())
 
 
+# Statistical data of dataset
+print(sales_dataset.describe())
+
+''' Numerical Features '''
+
+# Set aspects of seaborn and matplotlib
+sns.set()
+
+# Item weight distribution
+plt.figure(figsize=(6,6))
+sns.displot(sales_dataset['Item_Weight'])
+plt.show()
+
+# Item Visibility distribution
+plt.figure(figsize=(6,6))
+sns.displot(sales_dataset['Item_Visibility'])
+plt.show()
+
+# Item MRP distribution
+plt.figure(figsize=(6,6))
+sns.displot(sales_dataset['Item_MRP'])
+plt.show()
+
+# Outlet Establishment Year distribution
+plt.figure(figsize=(6,6))
+sns.countplot(x='Outlet_Establishment_Year', data=sales_dataset)
+plt.show()
+
+# Item Outlet Sales distribution
+plt.figure(figsize=(6,6))
+sns.displot(sales_dataset['Item_Outlet_Sales'])
+plt.show()
+
+'''  Categorical Features '''
+
+print(list(sales_dataset.select_dtypes(['object']).columns))
+
+# Item_Fat_Content distribution
+plt.figure(figsize=(6,6))
+sns.countplot(x='Item_Fat_Content', data=sales_dataset)
+plt.show()
+
+# Item_Type distribution
+plt.figure(figsize=(35,6))
+sns.countplot(x='Item_Type', data=sales_dataset)
+plt.show()
+
+# Outlet_Size distribution
+plt.figure(figsize=(6,6))
+sns.displot(sales_dataset['Outlet_Size'])
+plt.show()
+
+print(sales_dataset['Outlet_Size'])
+#Correct replacing values using mode
 
