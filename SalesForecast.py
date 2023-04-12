@@ -184,5 +184,33 @@ print(X.shape, y.shape)
 
 ''' Split data into Training and Test data '''
 
+
+# Split and verify data into train set and test set (20%)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+print(X.shape, X_train.shape, X_test.shape)
+
+''' Model Training '''
+
+regressor = XGBRegressor()
+
+regressor.fit(X_train, y_train)
+
+''' Evaluation '''
+
+# Training model prediction
+
+train_data_prediction = regressor.predict(X_train)
+
+# Determine R squared value for train data
+r2_train = metrics.r2_score(y_train, train_data_prediction)
+print(r2_train)
+
+
+# Fit and determine R2 value for test data
+
+test_data_prediction = regressor.predict(X_test)
+
+# r2 value for test data
+r2_test = metrics.r2_score(y_test, test_data_prediction)
+print(r2_test)
