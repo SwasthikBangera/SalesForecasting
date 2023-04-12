@@ -84,7 +84,7 @@ print(outlet_size_mode)
 missing_values = sales_dataset['Outlet_Size'].isnull()
 print(missing_values)
 
-#sales_dataset.loc[missing_values,'Outlet_Size'] = sales_dataset.loc[missing_values, 'Outlet_Type'].apply(lambda x: outlet_size_mode)
+sales_dataset.loc[missing_values,'Outlet_Size'] = sales_dataset.loc[missing_values, 'Outlet_Type'].apply(lambda x: outlet_size_mode[x])
 print(sales_dataset.isnull().sum())
 
 
@@ -135,11 +135,54 @@ plt.figure(figsize=(35,6))
 sns.countplot(x='Item_Type', data=sales_dataset)
 plt.show()
 
-# Outlet_Size distribution
+# Outlet_Size distribution - displot
 plt.figure(figsize=(6,6))
 sns.displot(sales_dataset['Outlet_Size'])
 plt.show()
 
+# Outlet_Size distribution - countplot
+plt.figure(figsize=(6,6))
+sns.countplot(x='Outlet_Size', data=sales_dataset)
+plt.show
+
+''' Data pre-processing using Label encoding '''
+
+#Calling the encoder
+encoder = LabelEncoder()
+
+# Convert Categorical data to Numerical data using Label Encoding
+sales_dataset['Item_Identifier'] = encoder.fit_transform(sales_dataset['Item_Identifier'])
+print(sales_dataset['Item_Identifier'])
+
+sales_dataset['Item_Fat_Content'] = encoder.fit_transform(sales_dataset['Item_Fat_Content'])
+print(sales_dataset['Item_Fat_Content'])
+
+sales_dataset['Item_Type'] = encoder.fit_transform(sales_dataset['Item_Type'])
+print(sales_dataset['Item_Type'])
+
+sales_dataset['Outlet_Identifier'] = encoder.fit_transform(sales_dataset['Outlet_Identifier'])
+print(sales_dataset['Outlet_Identifier'])
+
+sales_dataset['Outlet_Size'] = encoder.fit_transform(sales_dataset['Outlet_Size'])
 print(sales_dataset['Outlet_Size'])
-#Correct replacing values using mode
+
+sales_dataset['Outlet_Location_Type'] = encoder.fit_transform(sales_dataset['Outlet_Location_Type'])
+print(sales_dataset['Outlet_Location_Type'])
+
+sales_dataset['Outlet_Type'] = encoder.fit_transform(sales_dataset['Outlet_Type'])
+print(sales_dataset['Outlet_Type'])
+
+print(sales_dataset.head())
+
+''' Split the datta set to Features and Target '''
+
+X = sales_dataset.drop(columns='Item_Outlet_Sales',axis=1)
+y = sales_dataset['Item_Outlet_Sales']
+
+print(X.head(), y.head())
+print(X.shape, y.shape)
+
+''' Split data into Training and Test data '''
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
